@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+  <!--     -->
+  <xacro:macro name="ros_control">
+    <gazebo>
+      <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+        <robotNamespace>/omni_robot</robotNamespace>
+        <controlPeriod>0.02</controlPeriod>
+      </plugin>
+    </gazebo>
+  </xacro:macro>
+
+  <xacro:macro name="omni_steering" params="prefix publish_tf">
+		<gazebo>
+	    <plugin name="omni_steering" filename="libgazebo_ros_planar_move.so">
+	      <commandTopic>omni_robot/cmd_vel</commandTopic>
+	      <odometryTopic>odom</odometryTopic>
+	      <odometryFrame>odom</odometryFrame>
+	      <odometryRate>50.0</odometryRate>
+	      <robotBaseFrame>${prefix}base_footprint</robotBaseFrame>
+	      <publishTF>${publish_tf}</publishTF>
+		    <enableYAxis>false</enableYAxis>
+	    </plugin>
+	  </gazebo>
+  </xacro:macro>
+
+  <xacro:macro name="force_based_control" params="prefix publish_tf">
+    <gazebo>
+      <plugin name="object_controller" filename="libgazebo_ros_force_based_move.so">
+        <commandTopic>omni_robot/cmd_vel</commandTopic>
+        <odometryTopic>odom</odometryTopic>
+        <odometryFrame>odom</odometryFrame>
+        <odometryRate>100.0</odometryRate>
+        <robotBaseFrame>${prefix}base_footprint</robotBaseFrame>
+        <cmdVelTimeOut>0.25</cmdVelTimeOut>
+        <publishOdometryTf>1</publishOdometryTf>
+        <yaw_velocity_p_gain>1.0</yaw_velocity_p_gain>
+        <x_velocity_p_gain>1.0</x_velocity_p_gain>
+        <y_velocity_p_gain>1.0</y_velocity_p_gain>
+        <max_x_velocity>2.0</max_x_velocity>
+        <max_y_velocity>2.0</max_y_velocity>
+        <max_yaw_velocity>5</max_yaw_velocity>
+      </plugin>
+    </gazebo>
+
+  </xacro:macro>
+
+  <!-- <gazebo reference="left_top_wheel">
+    <material>Gazebo/Black</material>
+    <dampingFactor>0.8</dampingFactor>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="right_top_wheel">
+    <material>Gazebo/Black</material>
+    <dampingFactor>0.8</dampingFactor>
+	<turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="left_bottom_wheel">
+    <material>Gazebo/Black</material>
+    <dampingFactor>0.8</dampingFactor>
+	<turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="right_bottom_wheel">
+    <material>Gazebo/Black</material>
+    <dampingFactor>0.8</dampingFactor>
+	<turnGravityOff>false</turnGravityOff>
+  </gazebo> -->
+ 
+</robot>

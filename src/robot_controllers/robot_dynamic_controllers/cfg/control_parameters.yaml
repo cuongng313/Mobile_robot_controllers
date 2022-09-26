@@ -1,0 +1,6 @@
+PID_controller:
+ kP: 2.6
+ kI: 8.0
+ kD: 0.0
+ max: 5.0
+ min: -5.0

@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<robot>
+  <!--     -->
+<!-- <gazebo>
+    <plugin name="object_controller" filename="libgazebo_ros_planar_move.so">
+      <commandTopic>omni_robot/cmd_vel</commandTopic>
+      <odometryTopic>odom</odometryTopic>
+      <odometryFrame>odom</odometryFrame>
+      <odometryRate>30.0</odometryRate>
+      <robotBaseFrame>base_footprint</robotBaseFrame>
+    </plugin>
+  </gazebo>  -->
+  <gazebo>
+    <plugin name="nexus_ros_force_based_move" filename="libnexus_ros_force_based_move.so">
+      <commandTopic>omni_robot/cmd_vel</commandTopic>
+      <odometryTopic>odom</odometryTopic>
+      <odometryFrame>odom</odometryFrame>
+      <odometryRate>25.0</odometryRate>
+      <robotBaseFrame>base_footprint</robotBaseFrame>
+      <cmdVelTimeOut>0.25</cmdVelTimeOut>
+      <publishOdometryTf>1</publishOdometryTf>
+      <yaw_velocity_p_gain>1.0</yaw_velocity_p_gain>
+      <x_velocity_p_gain>1.0</x_velocity_p_gain>
+      <y_velocity_p_gain>1.0</y_velocity_p_gain>
+      <max_x_velocity>2.0</max_x_velocity>
+      <max_y_velocity>2.0</max_y_velocity>
+      <max_yaw_velocity>2.0</max_yaw_velocity>
+    </plugin>
+  </gazebo>
+
+
+  <gazebo reference="base_link">
+    <material>Gazebo/Blue</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+
+  <gazebo reference="left_top_wheel">
+    <material>Gazebo/Black</material>
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
+    <dampingFactor>0.1</dampingFactor>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="right_top_wheel">
+    <material>Gazebo/Black</material>
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
+    <dampingFactor>0.1</dampingFactor>
+	  <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="left_bottom_wheel">
+    <material>Gazebo/Black</material>
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
+    <dampingFactor>0.1</dampingFactor>
+	  <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="right_bottom_wheel">
+    <material>Gazebo/Black</material>
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
+    <dampingFactor>0.1</dampingFactor>
+	  <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+ 
+
+
+
+</robot>

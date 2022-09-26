@@ -1,0 +1,2063 @@
+<?xml version='1.0'?>
+
+<robot name="vast_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+
+  <xacro:include filename="$(find ros_robotics)/urdf/vast1.gazebo" />
+
+  <link name="base_footprint"></link>
+
+  <joint name="robot_footprint_joint" type="fixed">
+    <origin xyz="0 0 0.2" rpy="0 0 0" />
+    <parent link="base_footprint" />
+    <child link="base_link" />
+  </joint>
+  <!-- Base Link -->
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="1 1 0.15"/>
+        <!--long,wide,tall-->
+      </geometry>
+      <material name="blue">
+        <color rgba="0 0.5 1 1"/>
+      </material>
+    </visual>
+    <!-- Base collision -->
+    <collision>
+	<origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="1 1 0.15"/>
+        <!--long,wide,tall-->
+      </geometry>
+    </collision>
+    <inertial>
+     <mass value="30.0"/>
+      <inertia ixx="1.391" ixy="0.0" ixz="0.0"
+               iyy="1.391" iyz="0.0" izz="6.125"/>
+    </inertial>
+
+<!-- hold_box1 -->
+    <visual name="hold_box1">
+      <origin xyz="0 0 0.75" rpy="0 0 0" />
+      <geometry>
+        <box size="0.8 0.8 0.01" />
+      </geometry>
+      <material name="blue"/>
+    </visual>
+    <!-- hold box1 collision -->
+    <collision>
+      <origin xyz="0 0 0.75" rpy="0 0 0" />
+      <geometry>
+        <box size="0.8 0.8 0.01"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="2"/>
+      <inertia ixx="0.21333" ixy="0.0" ixz="0.0"
+               iyy="0.21333" iyz="0.0" izz="0.1067"/>
+    </inertial>
+
+<!-- hold_box2 -->
+    <visual name="hold_box2">
+      <origin xyz="0 0 1.43" rpy="0 0 0" />
+      <geometry>
+        <box size="0.8 0.8 0.01" />
+      </geometry>
+      <material name="blue"/>
+    </visual>
+    <!-- hold box2 collision -->
+    <collision>
+      <origin xyz="0 0 1.43" rpy="0 0 0" />
+      <geometry>
+        <box size="0.8 0.8 0.01"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="2"/>
+      <inertia ixx="0.21333" ixy="0.0" ixz="0.0"
+               iyy="0.21333" iyz="0.0" izz="0.1067"/>
+    </inertial>
+  <!-- left_bottom cylinder -->
+    <visual name="left_bottom_cylinder">
+      <origin xyz="0.25 -0.4 0.7" rpy="0 0 0" />
+      <geometry>
+        <box size="0.03 0.03 1.5" />
+      </geometry>
+      <material name="white">
+        <color rgba="0 0 0 1"/>
+      </material>
+    </visual>
+    <!-- left bottom cylinder collision -->
+    <collision>
+      <origin xyz="0.25 -0.4 0.7" rpy="0 0 0" />
+      <geometry>
+        <box size="0.03 0.03 1.5"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.5"/>
+      <inertia ixx="0.00" ixy="0.0" ixz="0.0"
+               iyy="0.00" iyz="0.0" izz="0.00"/>
+    </inertial>
+
+<!-- right_bottom cylinder -->
+    <visual name="right_bottom_cylinder">
+      <origin xyz="0.25 0.4 0.7" rpy="0 0 0" />
+      <geometry>
+        <box size="0.03 0.03 1.5" />
+      </geometry>
+      <material name="white"/> 
+    </visual>
+    <!-- right bottom cylinder collision -->
+    <collision>
+      <origin xyz="0.25 0.4 0.7" rpy="0 0 0" />
+      <geometry>
+        <box size="0.03 0.03 1.5"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.5"/>
+      <inertia ixx="0.00" ixy="0.0" ixz="0.0"
+               iyy="0.00" iyz="0.0" izz="0.00"/>
+    </inertial>
+
+
+<!-- between_top_cylinder -->
+    <visual name="between_top_cylinder">
+      <origin xyz="-0.4 0 0.7" rpy="0 0 0" />
+      <geometry>
+        <box size="0.03 0.03 1.5" />
+      </geometry>
+      <material name="white"/>
+    </visual>
+    <!-- between bottom cylinder collision -->
+    <collision>
+      <origin xyz="-0.4 0 0.7" rpy="0 0 0" />
+      <geometry>
+        <box size="0.03 0.03 1.5"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.5"/>
+      <inertia ixx="0.00" ixy="0.0" ixz="0.0"
+               iyy="0.00" iyz="0.0" izz="0.00"/>
+    </inertial>
+
+  </link>
+
+
+ <!-- right_top_wheel -->
+ <joint name="joint_right_top_wheel" type="continuous">
+    <parent link="base_link"/>
+    <child link="right_top_wheel"/>
+    <origin xyz="0.5 -0.5 0" rpy="1.570795 0 -2.3561925" />
+    <axis xyz="0 0 1" />
+     <limit effort="100" velocity="100"/>
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>
+
+  <link name="right_top_wheel">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0.0" />
+      <geometry>
+
+				<mesh filename="package://ros_robotics/meshes/rim.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="left_rim_material">
+
+				<color rgba="0.3 0 0 1"/>
+
+			</material>
+    </visual>
+    <!-- right_top_wheel collision -->
+    <collision>
+	<geometry>
+
+     		<mesh filename="package://ros_robotics/meshes/rim.stl" scale="11.5 11.5 11.5"/>
+    	</geometry>
+	</collision>
+    <inertial>
+      <mass value="5"/>
+      <inertia ixx="0.070416667" ixy="0" ixz="0"
+               iyy="0.0325" iyz="0" izz="0.070416667"/>
+    </inertial>
+
+
+  </link>
+
+  
+   <!-- left top Wheel -->
+  <joint name="joint_left_top_wheel" type="continuous">
+    <parent link="base_link"/>
+    <child link="left_top_wheel"/>
+    <origin xyz="0.5 0.5 0" rpy="1.570795 0 -0.7853975" />
+    <axis xyz="0 0 1" />
+    <limit effort="100" velocity="100"/>
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint> 
+
+  <link name="left_top_wheel">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0.0" />
+      <geometry>
+
+				<mesh filename="package://ros_robotics/meshes/rim.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="left_rim_material">
+
+				<color rgba="0.3 0 0 1"/>
+
+			</material>
+    </visual>
+    <!-- left_top wheel collision -->
+    <collision>
+	<geometry>
+
+     		<mesh filename="package://ros_robotics/meshes/rim.stl" scale="11.5 11.5 11.5"/>
+    	</geometry>
+	</collision>
+    <inertial>
+      <mass value="5"/>
+      <inertia ixx="0.070416667" ixy="0" ixz="0"
+               iyy="0.0325" iyz="0" izz="0.070416667"/>
+    </inertial>
+  </link>
+
+  
+
+  <!-- right_bottom Wheel -->
+  <joint name="joint_right_bottom_wheel" type="continuous">
+    <parent link="base_link"/>
+    <child link="right_bottom_wheel"/>
+    <origin xyz="-0.5 -0.5 0" rpy="1.570795 0 -3.9269875" />
+    <axis xyz="0 0 1" />
+    <limit effort="100" velocity="100"/>
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>
+  
+  <link name="right_bottom_wheel">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0.0" />
+      <geometry>
+
+				<mesh filename="package://ros_robotics/meshes/rim.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="left_rim_material">
+
+				<color rgba="0.3 0 0 1"/>
+
+			</material>
+    </visual>
+    <!-- right_bottom_wheel collision -->
+    <collision>
+	<geometry>
+
+     		<mesh filename="package://ros_robotics/meshes/rim.stl" scale="11.5 11.5 11.5"/>
+    	</geometry>
+	</collision>
+    <inertial>
+      <mass value="5"/>
+      <inertia ixx="0.070416667" ixy="0" ixz="0"
+               iyy="0.0325" iyz="0" izz="0.070416667"/>
+    </inertial>
+  </link>
+
+  
+  <!-- right left_bottom Wheel -->
+  <joint name="joint_left_bottom_wheel" type="continuous">
+    <parent link="base_link"/>
+    <child link="left_bottom_wheel"/>
+    <origin xyz="-0.5 0.5 0" rpy="1.570795 0 0.7853975" />
+    <axis xyz="0 0 1" />
+    <limit effort="100" velocity="100"/>
+    <joint_properties damping="0.0" friction="0.0"/>
+  </joint>
+
+  <link name="left_bottom_wheel">
+   <visual>
+      <origin xyz="0 0 0" rpy="0 0 0.0" />
+      <geometry>
+
+				<mesh filename="package://ros_robotics/meshes/rim.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="left_rim_material">
+
+				<color rgba="0.3 0 0 1"/>
+
+			</material>
+    </visual>
+
+    <!-- left_bottom wheel collision -->
+    <collision>
+	<geometry>
+
+     		<mesh filename="package://ros_robotics/meshes/rim.stl" scale="11.5 11.5 11.5"/>
+    	</geometry>
+	</collision>
+    <inertial>
+      <mass value="5"/>
+      <inertia ixx="0.070416667" ixy="0" ixz="0"
+               iyy="0.0325" iyz="0" izz="0.070416667"/>
+    </inertial>
+  </link>
+
+
+<!-- Roller bottem left wheel -->
+<!-- Roller bottem left wheel -->
+<link name="bottem_left_roller_e_link">
+	<visual>
+	    <origin xyz="0 0 0" rpy="0 0 0"/>
+	    <geometry>
+		<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+
+			</geometry>
+			<material name="bottem_left_roller_e_material">
+
+				<color rgba="0.0 0.0 1.0 1"/>
+
+			</material>
+
+		</visual>
+		<inertial>
+
+			<mass value="0.00179"/>
+			<inertia
+				ixx="0.000005"
+				ixy="0"
+				ixz="0"
+				iyy="0.000005"
+				iyz="0"
+				izz="0.000003"
+			/>
+
+		</inertial>
+		
+		<collision>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+
+		</collision>
+
+	</link>
+	<joint
+		name="bottem_left_roller_e_joint"
+		type="continuous"
+	>
+
+		<parent link="left_bottom_wheel"/>
+		<child link="bottem_left_roller_e_link"/>
+		<axis xyz="0 0 1"/>
+		<origin
+			xyz="0.155825 0 0.06325"
+			rpy="-1.570796326794896 0 0"
+		/>
+
+	</joint>
+	<link name="bottem_left_roller_ne_link">
+
+		<inertial>
+
+			<mass value="0.00179"/>
+			<inertia
+				ixx="0.000005"
+				ixy="0"
+				ixz="0"
+				iyy="0.000005"
+				iyz="0"
+				izz="0.000003"
+			/>
+
+		</inertial>
+		<visual>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="bottem_left_roller_e_material">
+
+				<color rgba="0.0 0.0 1.0 1"/>
+
+			</material>
+
+		</visual>
+		<collision>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+
+		</collision>
+
+	</link>
+	<joint
+		name="bottem_left_roller_ne_joint"
+		type="continuous"
+	>
+
+		<parent link="left_bottom_wheel"/>
+		<child link="bottem_left_roller_ne_link"/>
+		<axis xyz="0 0 1"/>
+		<origin
+			xyz="0.110184914 0.110184914 -0.06325"
+			rpy="-1.570796326794896 0 0.7853981633974483"
+		/>
+
+	</joint>
+	<link name="bottem_left_roller_n_link">
+
+		<inertial>
+
+			<mass value="0.00179"/>
+			<inertia
+				ixx="0.000005"
+				ixy="0"
+				ixz="0"
+				iyy="0.000005"
+				iyz="0"
+				izz="0.000003"
+			/>
+
+		</inertial>
+		<visual>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="bottem_left_roller_n_material">
+
+				<color rgba="0.0 0.0 1.0 1"/>
+
+			</material>
+
+		</visual>
+		<collision>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+
+		</collision>
+
+	</link>
+	<joint
+		name="bottem_left_roller_n_joint"
+		type="continuous"
+	>
+
+		<parent link="left_bottom_wheel"/>
+		<child link="bottem_left_roller_n_link"/>
+		<axis xyz="0 0 1"/>
+		<origin
+			xyz="0 0.155825 0.06325"
+			rpy="-1.570796326794896 0 1.570796326794896"
+		/>
+
+	</joint>
+	<link name="bottem_left_roller_nw_link">
+
+		<inertial>
+
+			<mass value="0.00179"/>
+			<inertia
+				ixx="0.000005"
+				ixy="0"
+				ixz="0"
+				iyy="0.000005"
+				iyz="0"
+				izz="0.000003"
+			/>
+
+		</inertial>
+		<visual>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="bottem_left_roller_nw_material">
+
+				<color rgba="0.0 0.0 1.0 1"/>
+
+			</material>
+
+		</visual>
+		<collision>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+
+		</collision>
+
+	</link>
+	<joint
+		name="bottem_left_roller_nw_joint"
+		type="continuous"
+	>
+
+		<parent link="left_bottom_wheel"/>
+		<child link="bottem_left_roller_nw_link"/>
+		<axis xyz="0 0 1"/>
+		<origin
+			xyz="-0.110184914 0.110184914 -0.06325"
+			rpy="-1.570796326794896 0 2.356194490192345"
+		/>
+
+	</joint>
+	<link name="bottem_left_roller_w_link">
+
+		<inertial>
+
+			<mass value="0.00179"/>
+			<inertia
+				ixx="0.000005"
+				ixy="0"
+				ixz="0"
+				iyy="0.000005"
+				iyz="0"
+				izz="0.000003"
+			/>
+
+		</inertial>
+		<visual>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="bottem_left_roller_w_material">
+
+				<color rgba="0.0 0.0 1.0 1"/>
+
+			</material>
+
+		</visual>
+		<collision>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+
+		</collision>
+
+	</link>
+	<joint
+		name="bottem_left_roller_w_joint"
+		type="continuous"
+	>
+
+		<parent link="left_bottom_wheel"/>
+		<child link="bottem_left_roller_w_link"/>
+		<axis xyz="0 0 1"/>
+		<origin
+			xyz="-0.155825 0 0.06325"
+			rpy="-1.570796326794896 0 3.141592653589793"
+		/>
+
+	</joint>
+	<link name="bottem_left_roller_sw_link">
+
+		<inertial>
+
+			<mass value="0.00179"/>
+			<inertia
+				ixx="0.000005"
+				ixy="0"
+				ixz="0"
+				iyy="0.000005"
+				iyz="0"
+				izz="0.000003"
+			/>
+
+		</inertial>
+		<visual>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="bottem_left_roller_sw_material">
+
+				<color rgba="0.0 0.0 1.0 1"/>
+
+			</material>
+
+		</visual>
+		<collision>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+
+		</collision>
+
+	</link>
+	<joint
+		name="bottem_left_roller_sw_joint"
+		type="continuous"
+	>
+
+		<parent link="left_bottom_wheel"/>
+		<child link="bottem_left_roller_sw_link"/>
+		<axis xyz="0 0 1"/>
+		<origin
+			xyz="-0.110184914 -0.110184914 -0.06325"
+			rpy="-1.570796326794896 0 -2.356194490192345"
+		/>
+
+	</joint>
+	<link name="bottem_left_roller_s_link">
+
+		<inertial>
+
+			<mass value="0.00179"/>
+			<inertia
+				ixx="0.000005"
+				ixy="0"
+				ixz="0"
+				iyy="0.000005"
+				iyz="0"
+				izz="0.000003"
+			/>
+
+		</inertial>
+		<visual>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="bottem_left_roller_s_material">
+
+				<color rgba="0.0 0.0 1.0 1"/>
+
+			</material>
+
+		</visual>
+		<collision>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+
+		</collision>
+
+	</link>
+	<joint
+		name="bottem_left_roller_s_joint"
+		type="continuous"
+	>
+
+		<parent link="left_bottom_wheel"/>
+		<child link="bottem_left_roller_s_link"/>
+		<axis xyz="0 0 1"/>
+		<origin
+			xyz="0 -0.155825 0.06325"
+			rpy="-1.570796326794896 0 -1.570796326794896"
+		/>
+
+	</joint>
+	<link name="bottem_left_roller_se_link">
+
+		<inertial>
+
+			<mass value="0.00179"/>
+			<inertia
+				ixx="0.000005"
+				ixy="0"
+				ixz="0"
+				iyy="0.000005"
+				iyz="0"
+				izz="0.000003"
+			/>
+
+		</inertial>
+		<visual>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="bottem_left_roller_se_material">
+
+				<color rgba="0.0 0.0 1.0 1"/>
+
+			</material>
+
+		</visual>
+		<collision>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+
+		</collision>
+
+	</link>
+	<joint
+		name="bottem_left_roller_se_joint"
+		type="continuous"
+	>
+
+		<parent link="left_bottom_wheel"/>
+		<child link="bottem_left_roller_se_link"/>
+		<axis xyz="0 0 1"/>
+		<origin
+			xyz="0.110184914 -0.110184914 -0.06325"
+			rpy="-1.570796326794896 0 -0.7853981633974483"
+		/>
+
+	</joint>
+
+
+<!-- Roller bottem left wheel -->
+<!-- Roller bottem left wheel -->
+<link name="bottem_right_roller_e_link">
+	<visual>
+		<origin
+			xyz="0 0 0"
+			rpy="0 0 0"
+		/>
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="bottem_right_roller_e_material">
+
+				<color rgba="0.0 0.0 1.0 1"/>
+
+			</material>
+
+		</visual>
+		<inertial>
+
+			<mass value="0.00179"/>
+			<inertia
+				ixx="0.000005"
+				ixy="0"
+				ixz="0"
+				iyy="0.000005"
+				iyz="0"
+				izz="0.000003"
+			/>
+
+		</inertial>
+		
+		<collision>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+
+		</collision>
+
+	</link>
+	<joint
+		name="bottem_right_roller_e_joint"
+		type="continuous"
+	>
+
+		<parent link="right_bottom_wheel"/>
+		<child link="bottem_right_roller_e_link"/>
+		<axis xyz="0 0 1"/>
+		<origin
+			xyz="0.155825 0 0.06325"
+			rpy="-1.570796326794896 0 0"
+		/>
+
+	</joint>
+	<link name="bottem_right_roller_ne_link">
+
+		<inertial>
+
+			<mass value="0.00179"/>
+			<inertia
+				ixx="0.000005"
+				ixy="0"
+				ixz="0"
+				iyy="0.000005"
+				iyz="0"
+				izz="0.000003"
+			/>
+
+		</inertial>
+		<visual>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="bottem_right_roller_e_material">
+
+				<color rgba="0.0 0.0 1.0 1"/>
+
+			</material>
+
+		</visual>
+		<collision>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+
+		</collision>
+
+	</link>
+	<joint
+		name="bottem_right_roller_ne_joint"
+		type="continuous"
+	>
+
+		<parent link="right_bottom_wheel"/>
+		<child link="bottem_right_roller_ne_link"/>
+		<axis xyz="0 0 1"/>
+		<origin
+			xyz="0.110184914 0.110184914 -0.06325"
+			rpy="-1.570796326794896 0 0.7853981633974483"
+		/>
+
+	</joint>
+	<link name="bottem_right_roller_n_link">
+
+		<inertial>
+
+			<mass value="0.00179"/>
+			<inertia
+				ixx="0.000005"
+				ixy="0"
+				ixz="0"
+				iyy="0.000005"
+				iyz="0"
+				izz="0.000003"
+			/>
+
+		</inertial>
+		<visual>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="bottem_right_roller_n_material">
+
+				<color rgba="0.0 0.0 1.0 1"/>
+
+			</material>
+
+		</visual>
+		<collision>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+
+		</collision>
+
+	</link>
+	<joint
+		name="bottem_right_roller_n_joint"
+		type="continuous"
+	>
+
+		<parent link="right_bottom_wheel"/>
+		<child link="bottem_right_roller_n_link"/>
+		<axis xyz="0 0 1"/>
+		<origin
+			xyz="0 0.155825 0.06325"
+			rpy="-1.570796326794896 0 1.570796326794896"
+		/>
+
+	</joint>
+	<link name="bottem_right_roller_nw_link">
+
+		<inertial>
+
+			<mass value="0.00179"/>
+			<inertia
+				ixx="0.000005"
+				ixy="0"
+				ixz="0"
+				iyy="0.000005"
+				iyz="0"
+				izz="0.000003"
+			/>
+
+		</inertial>
+		<visual>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="bottem_right_roller_nw_material">
+
+				<color rgba="0.0 0.0 1.0 1"/>
+
+			</material>
+
+		</visual>
+		<collision>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+
+		</collision>
+
+	</link>
+	<joint
+		name="bottem_right_roller_nw_joint"
+		type="continuous"
+	>
+
+		<parent link="right_bottom_wheel"/>
+		<child link="bottem_right_roller_nw_link"/>
+		<axis xyz="0 0 1"/>
+		<origin
+			xyz="-0.110184914 0.110184914 -0.06325"
+			rpy="-1.570796326794896 0 2.356194490192345"
+		/>
+
+	</joint>
+	<link name="bottem_right_roller_w_link">
+
+		<inertial>
+
+			<mass value="0.00179"/>
+			<inertia
+				ixx="0.000005"
+				ixy="0"
+				ixz="0"
+				iyy="0.000005"
+				iyz="0"
+				izz="0.000003"
+			/>
+
+		</inertial>
+		<visual>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="bottem_right_roller_w_material">
+
+				<color rgba="0.0 0.0 1.0 1"/>
+
+			</material>
+
+		</visual>
+		<collision>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+
+		</collision>
+
+	</link>
+	<joint
+		name="bottem_right_roller_w_joint"
+		type="continuous"
+	>
+
+		<parent link="right_bottom_wheel"/>
+		<child link="bottem_right_roller_w_link"/>
+		<axis xyz="0 0 1"/>
+		<origin
+			xyz="-0.155825 0 0.06325"
+			rpy="-1.570796326794896 0 3.141592653589793"
+		/>
+
+	</joint>
+	<link name="bottem_right_roller_sw_link">
+
+		<inertial>
+
+			<mass value="0.00179"/>
+			<inertia
+				ixx="0.000005"
+				ixy="0"
+				ixz="0"
+				iyy="0.000005"
+				iyz="0"
+				izz="0.000003"
+			/>
+
+		</inertial>
+		<visual>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="bottem_right_roller_sw_material">
+
+				<color rgba="0.0 0.0 1.0 1"/>
+
+			</material>
+
+		</visual>
+		<collision>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+
+		</collision>
+
+	</link>
+	<joint
+		name="bottem_right_roller_sw_joint"
+		type="continuous"
+	>
+
+		<parent link="right_bottom_wheel"/>
+		<child link="bottem_right_roller_sw_link"/>
+		<axis xyz="0 0 1"/>
+		<origin
+			xyz="-0.110184914 -0.110184914 -0.06325"
+			rpy="-1.570796326794896 0 -2.356194490192345"
+		/>
+
+	</joint>
+	<link name="bottem_right_roller_s_link">
+
+		<inertial>
+
+			<mass value="0.00179"/>
+			<inertia
+				ixx="0.000005"
+				ixy="0"
+				ixz="0"
+				iyy="0.000005"
+				iyz="0"
+				izz="0.000003"
+			/>
+
+		</inertial>
+		<visual>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="bottem_right_roller_s_material">
+
+				<color rgba="0.0 0.0 1.0 1"/>
+
+			</material>
+
+		</visual>
+		<collision>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+
+		</collision>
+
+	</link>
+	<joint
+		name="bottem_right_roller_s_joint"
+		type="continuous"
+	>
+
+		<parent link="right_bottom_wheel"/>
+		<child link="bottem_right_roller_s_link"/>
+		<axis xyz="0 0 1"/>
+		<origin
+			xyz="0 -0.155825 0.06325"
+			rpy="-1.570796326794896 0 -1.570796326794896"
+		/>
+
+	</joint>
+	<link name="bottem_right_roller_se_link">
+
+		<inertial>
+
+			<mass value="0.00179"/>
+			<inertia
+				ixx="0.000005"
+				ixy="0"
+				ixz="0"
+				iyy="0.000005"
+				iyz="0"
+				izz="0.000003"
+			/>
+
+		</inertial>
+		<visual>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="bottem_right_roller_se_material">
+
+				<color rgba="0.0 0.0 1.0 1"/>
+
+			</material>
+
+		</visual>
+		<collision>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+
+		</collision>
+
+	</link>
+	<joint
+		name="bottem_right_roller_se_joint"
+		type="continuous"
+	>
+
+		<parent link="right_bottom_wheel"/>
+		<child link="bottem_right_roller_se_link"/>
+		<axis xyz="0 0 1"/>
+		<origin
+			xyz="0.110184914 -0.110184914 -0.06325"
+			rpy="-1.570796326794896 0 -0.7853981633974483"
+		/>
+
+	</joint>
+
+
+<!-- Roller bottem left wheel -->
+<!-- Roller bottem left wheel -->
+<link name="top_left_roller_e_link">
+	<visual>
+		<origin
+			xyz="0 0 0"
+			rpy="0 0 0"
+		/>
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="top_left_roller_e_material">
+
+				<color rgba="0.0 0.0 1.0 1"/>
+
+			</material>
+
+		</visual>
+		<inertial>
+
+			<mass value="0.00179"/>
+			<inertia
+				ixx="0.000005"
+				ixy="0"
+				ixz="0"
+				iyy="0.000005"
+				iyz="0"
+				izz="0.000003"
+			/>
+
+		</inertial>
+		
+		<collision>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+
+		</collision>
+
+	</link>
+	<joint
+		name="top_left_roller_e_joint"
+		type="continuous"
+	>
+
+		<parent link="left_top_wheel"/>
+		<child link="top_left_roller_e_link"/>
+		<axis xyz="0 0 1"/>
+		<origin
+			xyz="0.155825 0 0.06325"
+			rpy="-1.570796326794896 0 0"
+		/>
+
+	</joint>
+	<link name="top_left_roller_ne_link">
+
+		<inertial>
+
+			<mass value="0.00179"/>
+			<inertia
+				ixx="0.000005"
+				ixy="0"
+				ixz="0"
+				iyy="0.000005"
+				iyz="0"
+				izz="0.000003"
+			/>
+
+		</inertial>
+		<visual>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="top_left_roller_e_material">
+
+				<color rgba="0.0 0.0 1.0 1"/>
+
+			</material>
+
+		</visual>
+		<collision>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+
+		</collision>
+
+	</link>
+	<joint
+		name="top_left_roller_ne_joint"
+		type="continuous"
+	>
+
+		<parent link="left_top_wheel"/>
+		<child link="top_left_roller_ne_link"/>
+		<axis xyz="0 0 1"/>
+		<origin
+			xyz="0.110184914 0.110184914 -0.06325"
+			rpy="-1.570796326794896 0 0.7853981633974483"
+		/>
+
+	</joint>
+	<link name="top_left_roller_n_link">
+
+		<inertial>
+
+			<mass value="0.00179"/>
+			<inertia
+				ixx="0.000005"
+				ixy="0"
+				ixz="0"
+				iyy="0.000005"
+				iyz="0"
+				izz="0.000003"
+			/>
+
+		</inertial>
+		<visual>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="top_left_roller_n_material">
+
+				<color rgba="0.0 0.0 1.0 1"/>
+
+			</material>
+
+		</visual>
+		<collision>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+
+		</collision>
+
+	</link>
+	<joint
+		name="top_left_roller_n_joint"
+		type="continuous"
+	>
+
+		<parent link="left_top_wheel"/>
+		<child link="top_left_roller_n_link"/>
+		<axis xyz="0 0 1"/>
+		<origin
+			xyz="0 0.155825 0.06325"
+			rpy="-1.570796326794896 0 1.570796326794896"
+		/>
+
+	</joint>
+	<link name="top_left_roller_nw_link">
+
+		<inertial>
+
+			<mass value="0.00179"/>
+			<inertia
+				ixx="0.000005"
+				ixy="0"
+				ixz="0"
+				iyy="0.000005"
+				iyz="0"
+				izz="0.000003"
+			/>
+
+		</inertial>
+		<visual>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="top_left_roller_nw_material">
+
+				<color rgba="0.0 0.0 1.0 1"/>
+
+			</material>
+
+		</visual>
+		<collision>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+
+		</collision>
+
+	</link>
+	<joint
+		name="top_left_roller_nw_joint"
+		type="continuous"
+	>
+
+		<parent link="left_top_wheel"/>
+		<child link="top_left_roller_nw_link"/>
+		<axis xyz="0 0 1"/>
+		<origin
+			xyz="-0.110184914 0.110184914 -0.06325"
+			rpy="-1.570796326794896 0 2.356194490192345"
+		/>
+
+	</joint>
+	<link name="top_left_roller_w_link">
+
+		<inertial>
+
+			<mass value="0.00179"/>
+			<inertia
+				ixx="0.000005"
+				ixy="0"
+				ixz="0"
+				iyy="0.000005"
+				iyz="0"
+				izz="0.000003"
+			/>
+
+		</inertial>
+		<visual>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="top_left_roller_w_material">
+
+				<color rgba="0.0 0.0 1.0 1"/>
+
+			</material>
+
+		</visual>
+		<collision>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+
+		</collision>
+
+	</link>
+	<joint
+		name="top_left_roller_w_joint"
+		type="continuous"
+	>
+
+		<parent link="left_top_wheel"/>
+		<child link="top_left_roller_w_link"/>
+		<axis xyz="0 0 1"/>
+		<origin
+			xyz="-0.155825 0 0.06325"
+			rpy="-1.570796326794896 0 3.141592653589793"
+		/>
+
+	</joint>
+	<link name="top_left_roller_sw_link">
+
+		<inertial>
+
+			<mass value="0.00179"/>
+			<inertia
+				ixx="0.000005"
+				ixy="0"
+				ixz="0"
+				iyy="0.000005"
+				iyz="0"
+				izz="0.000003"
+			/>
+
+		</inertial>
+		<visual>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="top_left_roller_sw_material">
+
+				<color rgba="0.0 0.0 1.0 1"/>
+
+			</material>
+
+		</visual>
+		<collision>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+
+		</collision>
+
+	</link>
+	<joint
+		name="top_left_roller_sw_joint"
+		type="continuous"
+	>
+
+		<parent link="left_top_wheel"/>
+		<child link="top_left_roller_sw_link"/>
+		<axis xyz="0 0 1"/>
+		<origin
+			xyz="-0.110184914 -0.110184914 -0.06325"
+			rpy="-1.570796326794896 0 -2.356194490192345"
+		/>
+
+	</joint>
+	<link name="top_left_roller_s_link">
+
+		<inertial>
+
+			<mass value="0.00179"/>
+			<inertia
+				ixx="0.000005"
+				ixy="0"
+				ixz="0"
+				iyy="0.000005"
+				iyz="0"
+				izz="0.000003"
+			/>
+
+		</inertial>
+		<visual>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="top_left_roller_s_material">
+
+				<color rgba="0.0 0.0 1.0 1"/>
+
+			</material>
+
+		</visual>
+		<collision>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+
+		</collision>
+
+	</link>
+	<joint
+		name="top_left_roller_s_joint"
+		type="continuous"
+	>
+
+		<parent link="left_top_wheel"/>
+		<child link="top_left_roller_s_link"/>
+		<axis xyz="0 0 1"/>
+		<origin
+			xyz="0 -0.155825 0.06325"
+			rpy="-1.570796326794896 0 -1.570796326794896"
+		/>
+
+	</joint>
+	<link name="top_left_roller_se_link">
+
+		<inertial>
+
+			<mass value="0.00179"/>
+			<inertia
+				ixx="0.000005"
+				ixy="0"
+				ixz="0"
+				iyy="0.000005"
+				iyz="0"
+				izz="0.000003"
+			/>
+
+		</inertial>
+		<visual>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="top_left_roller_se_material">
+
+				<color rgba="0.0 0.0 1.0 1"/>
+
+			</material>
+
+		</visual>
+		<collision>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+
+		</collision>
+
+	</link>
+	<joint
+		name="top_left_roller_se_joint"
+		type="continuous"
+	>
+
+		<parent link="left_top_wheel"/>
+		<child link="top_left_roller_se_link"/>
+		<axis xyz="0 0 1"/>
+		<origin
+			xyz="0.110184914 -0.110184914 -0.06325"
+			rpy="-1.570796326794896 0 -0.7853981633974483"
+		/>
+
+	</joint>
+
+
+<!-- Roller bottem left wheel -->
+<!-- Roller bottem left wheel -->
+<link name="right_left_roller_e_link">
+	<visual>
+		<origin
+			xyz="0 0 0"
+			rpy="0 0 0"
+		/>
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="right_left_roller_e_material">
+
+				<color rgba="0.0 0.0 1.0 1"/>
+
+			</material>
+
+		</visual>
+		<inertial>
+
+			<mass value="0.00179"/>
+			<inertia
+				ixx="0.000005"
+				ixy="0"
+				ixz="0"
+				iyy="0.000005"
+				iyz="0"
+				izz="0.000003"
+			/>
+
+		</inertial>
+		
+		<collision>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+
+		</collision>
+
+	</link>
+	<joint
+		name="right_left_roller_e_joint"
+		type="continuous"
+	>
+
+		<parent link="right_top_wheel"/>
+		<child link="right_left_roller_e_link"/>
+		<axis xyz="0 0 1"/>
+		<origin
+			xyz="0.155825 0 0.06325"
+			rpy="-1.570796326794896 0 0"
+		/>
+
+	</joint>
+	<link name="right_left_roller_ne_link">
+
+		<inertial>
+
+			<mass value="0.00179"/>
+			<inertia
+				ixx="0.000005"
+				ixy="0"
+				ixz="0"
+				iyy="0.000005"
+				iyz="0"
+				izz="0.000003"
+			/>
+
+		</inertial>
+		<visual>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="right_left_roller_e_material">
+
+				<color rgba="0.0 0.0 1.0 1"/>
+
+			</material>
+
+		</visual>
+		<collision>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+
+		</collision>
+
+	</link>
+	<joint
+		name="right_left_roller_ne_joint"
+		type="continuous"
+	>
+
+		<parent link="right_top_wheel"/>
+		<child link="right_left_roller_ne_link"/>
+		<axis xyz="0 0 1"/>
+		<origin
+			xyz="0.110184914 0.110184914 -0.06325"
+			rpy="-1.570796326794896 0 0.7853981633974483"
+		/>
+
+	</joint>
+	<link name="right_left_roller_n_link">
+
+		<inertial>
+
+			<mass value="0.00179"/>
+			<inertia
+				ixx="0.000005"
+				ixy="0"
+				ixz="0"
+				iyy="0.000005"
+				iyz="0"
+				izz="0.000003"
+			/>
+
+		</inertial>
+		<visual>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="right_left_roller_n_material">
+
+				<color rgba="0.0 0.0 1.0 1"/>
+
+			</material>
+
+		</visual>
+		<collision>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+
+		</collision>
+
+	</link>
+	<joint
+		name="right_left_roller_n_joint"
+		type="continuous"
+	>
+
+		<parent link="right_top_wheel"/>
+		<child link="right_left_roller_n_link"/>
+		<axis xyz="0 0 1"/>
+		<origin
+			xyz="0 0.155825 0.06325"
+			rpy="-1.570796326794896 0 1.570796326794896"
+		/>
+
+	</joint>
+	<link name="right_left_roller_nw_link">
+
+		<inertial>
+
+			<mass value="0.00179"/>
+			<inertia
+				ixx="0.000005"
+				ixy="0"
+				ixz="0"
+				iyy="0.000005"
+				iyz="0"
+				izz="0.000003"
+			/>
+
+		</inertial>
+		<visual>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="right_left_roller_nw_material">
+
+				<color rgba="0.0 0.0 1.0 1"/>
+
+			</material>
+
+		</visual>
+		<collision>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+
+		</collision>
+
+	</link>
+	<joint
+		name="right_left_roller_nw_joint"
+		type="continuous"
+	>
+
+		<parent link="right_top_wheel"/>
+		<child link="right_left_roller_nw_link"/>
+		<axis xyz="0 0 1"/>
+		<origin
+			xyz="-0.110184914 0.110184914 -0.06325"
+			rpy="-1.570796326794896 0 2.356194490192345"
+		/>
+
+	</joint>
+	<link name="right_left_roller_w_link">
+
+		<inertial>
+
+			<mass value="0.00179"/>
+			<inertia
+				ixx="0.000005"
+				ixy="0"
+				ixz="0"
+				iyy="0.000005"
+				iyz="0"
+				izz="0.000003"
+			/>
+
+		</inertial>
+		<visual>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="right_left_roller_w_material">
+
+				<color rgba="0.0 0.0 1.0 1"/>
+
+			</material>
+
+		</visual>
+		<collision>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+
+		</collision>
+
+	</link>
+	<joint
+		name="right_left_roller_w_joint"
+		type="continuous"
+	>
+
+		<parent link="right_top_wheel"/>
+		<child link="right_left_roller_w_link"/>
+		<axis xyz="0 0 1"/>
+		<origin
+			xyz="-0.155825 0 0.06325"
+			rpy="-1.570796326794896 0 3.141592653589793"
+		/>
+
+	</joint>
+	<link name="right_left_roller_sw_link">
+
+		<inertial>
+
+			<mass value="0.00179"/>
+			<inertia
+				ixx="0.000005"
+				ixy="0"
+				ixz="0"
+				iyy="0.000005"
+				iyz="0"
+				izz="0.000003"
+			/>
+
+		</inertial>
+		<visual>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="right_left_roller_sw_material">
+
+				<color rgba="0.0 0.0 1.0 1"/>
+
+			</material>
+
+		</visual>
+		<collision>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+
+		</collision>
+
+	</link>
+	<joint
+		name="right_left_roller_sw_joint"
+		type="continuous"
+	>
+
+		<parent link="right_top_wheel"/>
+		<child link="right_left_roller_sw_link"/>
+		<axis xyz="0 0 1"/>
+		<origin
+			xyz="-0.110184914 -0.110184914 -0.06325"
+			rpy="-1.570796326794896 0 -2.356194490192345"
+		/>
+
+	</joint>
+	<link name="right_left_roller_s_link">
+
+		<inertial>
+
+			<mass value="0.00179"/>
+			<inertia
+				ixx="0.000005"
+				ixy="0"
+				ixz="0"
+				iyy="0.000005"
+				iyz="0"
+				izz="0.000003"
+			/>
+
+		</inertial>
+		<visual>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="right_left_roller_s_material">
+
+				<color rgba="0.0 0.0 1.0 1"/>
+
+			</material>
+
+		</visual>
+		<collision>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+
+		</collision>
+
+	</link>
+	<joint
+		name="right_left_roller_s_joint"
+		type="continuous"
+	>
+
+		<parent link="right_top_wheel"/>
+		<child link="right_left_roller_s_link"/>
+		<axis xyz="0 0 1"/>
+		<origin
+			xyz="0 -0.155825 0.06325"
+			rpy="-1.570796326794896 0 -1.570796326794896"
+		/>
+
+	</joint>
+	<link name="right_left_roller_se_link">
+
+		<inertial>
+
+			<mass value="0.00179"/>
+			<inertia
+				ixx="0.000005"
+				ixy="0"
+				ixz="0"
+				iyy="0.000005"
+				iyz="0"
+				izz="0.000003"
+			/>
+
+		</inertial>
+		<visual>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+			<material name="right_left_roller_se_material">
+
+				<color rgba="0.0 0.0 1.0 1"/>
+
+			</material>
+
+		</visual>
+		<collision>
+
+			<geometry>
+
+				<mesh filename="package://ros_robotics/meshes/roller.stl" scale="11.5 11.5 11.5"/>
+
+			</geometry>
+
+		</collision>
+
+	</link>
+	<joint
+		name="right_left_roller_se_joint"
+		type="continuous"
+	>
+
+		<parent link="right_top_wheel"/>
+		<child link="right_left_roller_se_link"/>
+		<axis xyz="0 0 1"/>
+		<origin
+			xyz="0.110184914 -0.110184914 -0.06325"
+			rpy="-1.570796326794896 0 -0.7853981633974483"
+		/>
+
+	</joint>
+
+</robot>

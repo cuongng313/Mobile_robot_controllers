@@ -1,0 +1,24 @@
+<package>
+  <name>robot_controllers</name>
+  <version>1.0.0</version>
+  <description>Fundamental robot controllers</description>
+
+
+  <license>TODO</license>
+
+
+  <author email="manhcuong313.ng@gmail.com">Marcus</author>
+  <maintainer email="manhcuong313.ng@gmail.com">Marcus</maintainer>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <run_depend>robot_kinematic_controllers</run_depend>
+  <run_depend>robot_dynamic_controllers</run_depend>
+  <run_depend>robot_description</run_depend>
+  <run_depend>reference_path_generator</run_depend>
+  <run_depend>robot_PID_controller</run_depend>
+
+  <export>
+    <metapackage/>
+  </export>
+</package>
