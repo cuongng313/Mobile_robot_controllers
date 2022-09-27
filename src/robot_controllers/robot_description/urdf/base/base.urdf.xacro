@@ -60,6 +60,7 @@
 		</gazebo>
 
 		<xacro:force_based_control prefix="$(arg prefix)" publish_tf = "true"/>
+		<!-- <xacro:omni_steering prefix="$(arg prefix)" publish_tf = "true"/> -->
 		<xacro:ros_control/>
   	</xacro:macro>
 </robot>

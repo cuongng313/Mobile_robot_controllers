@@ -233,7 +233,7 @@ int main(int argc, char** argv){
               0,  ky3, 0,
               0, 0, ktheta3;
 
-    velocityError_ = gainSurface*velocityError_;
+    // velocityError_ = gainSurface*velocityError_;
 
     Eigen::Vector3f signS;    signS.setZero();
     signS << sgn(velocityError_(0)), sgn(velocityError_(1)), sgn(velocityError_(2));
@@ -242,11 +242,12 @@ int main(int argc, char** argv){
     controlSignal_ = D*globalVelocity + M_*(refVelDot - trackingError_ - gainK2*velocityError_ - gainK3*signS);  
 
 
-    if(abs(controlError.x) <= 0.001) {controlSignal_(0) = 0;}
-    if(abs(controlError.y) <= 0.001) {controlSignal_(1) = 0;}
-    if(abs(controlError.z) <= 0.001) {controlSignal_(2) = 0;}
+    // if(abs(controlError.x) <= 0.001) {controlSignal_(0) = 0;}
+    // if(abs(controlError.y) <= 0.001) {controlSignal_(1) = 0;}
+    // if(abs(controlError.z) <= 0.001) {controlSignal_(2) = 0;}
 
-    const double SatValue = 500;
+    const double SatValue = 300;
+    const double SatValueW = 300;
 
     if (controlSignal_(0) > SatValue) {controlSignal_(0) = SatValue;}
     if (controlSignal_(0) < -SatValue) {controlSignal_(0) = -SatValue;}
@@ -254,8 +255,8 @@ int main(int argc, char** argv){
     if (controlSignal_(1) > SatValue) {controlSignal_(1) = SatValue;};
     if (controlSignal_(1)< -SatValue) {controlSignal_(1) = -SatValue;};
 
-    if (controlSignal_(2) > SatValue) {controlSignal_(2) = SatValue;}
-    if (controlSignal_(2) < -SatValue) {controlSignal_(2) = -SatValue;};
+    if (controlSignal_(2) > SatValueW) {controlSignal_(2) = SatValueW;}
+    if (controlSignal_(2) < -SatValueW) {controlSignal_(2) = -SatValueW;};
 
     std::cout << "ref x y theta: " << refPath_(0)
                                     << " "
