@@ -79,7 +79,7 @@ void refPathDerivativeCallback(const nav_msgs::Path& msg) {ref_path_derivative =
 void refPath2DerivativeCallback(const nav_msgs::Path& msg) {ref_path_2derivative = msg;}
 /*------------------------------------------*/
 
-int sgn(double v) {
+float sgn(double v) {
   if(saturatedValue == 0) {
     return (v < 0) ? -1 : ((v > 0) ? 1 : 0);
   }
@@ -242,11 +242,11 @@ int main(int argc, char** argv){
     controlSignal_ = D*globalVelocity + M_*(refVelDot - trackingError_ - gainK2*velocityError_ - gainK3*signS);  
 
 
-    // if(abs(controlError.x) <= 0.001) {controlSignal_(0) = 0;}
-    // if(abs(controlError.y) <= 0.001) {controlSignal_(1) = 0;}
-    // if(abs(controlError.z) <= 0.001) {controlSignal_(2) = 0;}
+    if(abs(controlError.x) <= 0.00001) {controlSignal_(0) = 0;}
+    if(abs(controlError.y) <= 0.00001) {controlSignal_(1) = 0;}
+    if(abs(controlError.z) <= 0.00001) {controlSignal_(2) = 0;}
 
-    const double SatValue = 300;
+    const double SatValue = 500;
     const double SatValueW = 300;
 
     if (controlSignal_(0) > SatValue) {controlSignal_(0) = SatValue;}
