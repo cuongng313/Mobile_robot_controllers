@@ -98,6 +98,7 @@ find_package(catkin REQUIRED COMPONENTS
 #find_package(catkin REQUIRED dynamic_reconfigure)
 generate_dynamic_reconfigure_options(
   # cfg/PIDcontroller_reconfig.cfg
+  cfg/BackSMCcontroller_reconfig.cfg
   cfg/SMCcontroller_reconfig.cfg
 )
 
@@ -216,6 +217,10 @@ include_directories(
 
 # make sure configure headers are built before any node using them
 
-add_executable(robot_dynamic_controllers src/robot_controllers_BackSMC_dynamic.cpp)
-add_dependencies(robot_dynamic_controllers ${PROJECT_NAME}_gencfg)
-target_link_libraries(robot_dynamic_controllers ${catkin_LIBRARIES})
+add_executable(BackSMC_controller src/Backstepping_SMC.cpp)
+add_dependencies(BackSMC_controller ${PROJECT_NAME}_gencfg)
+target_link_libraries(BackSMC_controller ${catkin_LIBRARIES})
+
+add_executable(SMC_controller src/SMC_second_order.cpp)
+add_dependencies(SMC_controller ${PROJECT_NAME}_gencfg)
+target_link_libraries(SMC_controller ${catkin_LIBRARIES})

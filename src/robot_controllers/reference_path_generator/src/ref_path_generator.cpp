@@ -60,7 +60,7 @@ bool path_generator(nav_msgs::Path& path, nav_msgs::Path& ref_path_derivative, n
 {
     // Generate the circle path
     double Ts = 0.1;
-    double step = 1000;
+    double step = 2000;
     double TimePeriod = step*Ts;
     double ohmega = 2*PI/TimePeriod;
     // double SamplingTime = 1/step;
@@ -86,11 +86,24 @@ bool path_generator(nav_msgs::Path& path, nav_msgs::Path& ref_path_derivative, n
         double dx, dy, dyaw;
         double dxE, dyE, dyawE;
         double dx2E, dy2E, dyaw2E;
+        double yawd, yaw_sd, yaw_ssd;
         
         
-        yaw = 2*PI*i/step;
-        yaw_s = 2*PI*(i+1)/step;
-        yaw_ss = 2*PI*(i+2)/step;
+        yaw = 2*PI*i/step + PI/2;
+        yaw_s = 2*PI*(i+1)/step + PI/2;
+        yaw_ss = 2*PI*(i+2)/step + PI/2;
+
+        yawd = 2*PI*i/step;
+        yaw_sd = 2*PI*(i+1)/step;
+        yaw_ssd = 2*PI*(i+2)/step;
+
+
+        if(yawd > PI) {yawd = yawd - 2*PI;}
+        if(yawd < -PI) {yawd = yawd + 2*PI;}
+        if(yaw_sd > PI) {yaw_sd = yaw_sd - 2*PI;}
+        if(yaw_sd < -PI) {yaw_sd = yaw_sd + 2*PI;}
+        if(yaw_ssd > PI) {yaw_ssd = yaw_ssd - 2*PI;}
+        if(yaw_ssd < -PI) {yaw_ssd = yaw_ssd + 2*PI;}
 
         // correct yaw angle
         if(yaw > PI) {yaw = yaw - 2*PI;}
@@ -100,19 +113,15 @@ bool path_generator(nav_msgs::Path& path, nav_msgs::Path& ref_path_derivative, n
         if(yaw_ss > PI) {yaw_ss = yaw_ss - 2*PI;}
         if(yaw_ss < -PI) {yaw_ss = yaw_ss + 2*PI;}
        
-        x = x_radius*sin(yaw);   
-        y = y_radius*cos(yaw);
+        x = x_radius*cos(yawd);   
+        y = y_radius*sin(yawd);
 
-        x_s = x_radius*sin(yaw_s);
-        y_s = y_radius*cos(yaw_s);
+        x_s = x_radius*cos(yaw_sd);
+        y_s = y_radius*sin(yaw_sd);
 
-        x_ss = x_radius*sin(yaw_ss);
-        y_ss = y_radius*cos(yaw_ss);
+        x_ss = x_radius*cos(yaw_ssd);
+        y_ss = y_radius*sin(yaw_ssd);
 
-        // derivative 
-        dx = x_radius*2*PI*cos(yaw);
-        dy = -y_radius*2*PI*sin(yaw);
-        dyaw = 2*PI;
 
         // Euler derivative
         dxE = (x_s - x)/SamplingTime;
