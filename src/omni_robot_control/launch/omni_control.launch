@@ -1,0 +1,18 @@
+<launch>
+
+  <arg name="prefix" default=""/>
+  <!-- Load joint controller configurations from YAML file to parameter server -->
+  <rosparam file="$(find omni_robot_control)/config/omni_control.yaml" command="load"/>
+
+  <!-- load the controllers -->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" ns="/omni_robot" args="joint_RT_torque_controller joint_LT_torque_controller 
+            joint_RB_torque_controller joint_LB_torque_controller joint_state_controller"/>
+
+  <!-- convert joint states to TF transforms for rviz, etc -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+    respawn="false" output="screen">
+    <remap from="/joint_states" to="/omni_robot/joint_states" />
+  </node>
+
+</launch>

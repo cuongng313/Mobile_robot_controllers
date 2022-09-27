@@ -1,0 +1,4 @@
+1. PID controller cannot perform well because the robot modle is nonlinear
+2. kinematic model with vx vy w playing as control signal can ensure the quality 
+but should be tested more when using wheel velocity as input
+3. dynamic controllers perform quite good but not as that of kinematic controllers

@@ -1,0 +1,7 @@
+<launch>
+  <!-- <rosparam file="$(find robot_controllers)/cfg/control_parameters.yaml" /> -->
+
+  <node pkg="robot_kinematic_controllers" type="robot_kinematic_controllers" name="robot_kinematic_controllers" output = "screen" >
+  
+  </node>
+</launch>

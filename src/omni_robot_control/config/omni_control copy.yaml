@@ -1,0 +1,22 @@
+omni_robot:
+  # Publish all joint states -----------------------------------
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 50  
+
+  # Position Controllers ---------------------------------------
+  joint_RT_torque_controller:
+    type: effort_controllers/JointEffortController
+    joint: front_right_wheel_joint
+  
+  joint_LT_torque_controller:
+    type: effort_controllers/JointEffortController
+    joint: front_left_wheel_joint
+  
+  joint_RB_torque_controller:
+    type: effort_controllers/JointEffortController
+    joint: back_right_wheel_joint
+
+  joint_LB_torque_controller:
+    type: effort_controllers/JointEffortController
+    joint: back_left_wheel_joint

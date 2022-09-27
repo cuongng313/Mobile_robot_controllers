@@ -1,0 +1,47 @@
+{
+    "configurations": [
+        {
+            "browse": {
+                "databaseFilename": "",
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "includePath": [
+                "/home/cuongnguen/IVASTbot/Mobile_robot/devel/include/**",
+                "/home/cuongnguen/VinAICode/cyclobot/XigloBot/devel/include/**",
+                "/opt/ros/melodic/include/**",
+                "/home/cuongnguen/VinAICode/cyclobot/XigloBot/src/navigation/amcl/include/**",
+                "/home/cuongnguen/IVASTbot/Mobile_robot/src/ros_astra_camera/include/**",
+                "/home/cuongnguen/VinAICode/cyclobot/XigloBot/src/navigation/base_local_planner/include/**",
+                "/home/cuongnguen/VinAICode/cyclobot/XigloBot/src/behavior_planner/include/**",
+                "/home/cuongnguen/VinAICode/cyclobot/XigloBot/src/navigation/carrot_planner/include/**",
+                "/home/cuongnguen/VinAICode/cyclobot/XigloBot/src/navigation/clear_costmap_recovery/include/**",
+                "/home/cuongnguen/VinAICode/cyclobot/XigloBot/src/navigation/costmap_2d/include/**",
+                "/home/cuongnguen/IVASTbot/Mobile_robot/src/depthimage_to_laserscan/include/**",
+                "/home/cuongnguen/VinAICode/cyclobot/XigloBot/src/navigation/dwa_local_planner/include/**",
+                "/home/cuongnguen/VinAICode/cyclobot/XigloBot/src/ekf_odometry/include/**",
+                "/home/cuongnguen/VinAICode/cyclobot/XigloBot/src/navigation/global_planner/include/**",
+                "/home/cuongnguen/VinAICode/cyclobot/XigloBot/src/imu_tools/imu_complementary_filter/include/**",
+                "/home/cuongnguen/VinAICode/cyclobot/XigloBot/src/imu_tools/imu_filter_madgwick/include/**",
+                "/home/cuongnguen/VinAICode/cyclobot/XigloBot/src/laser_filters/include/**",
+                "/home/cuongnguen/VinAICode/cyclobot/XigloBot/src/navigation/map_server/include/**",
+                "/home/cuongnguen/VinAICode/cyclobot/XigloBot/src/navigation/move_base/include/**",
+                "/home/cuongnguen/VinAICode/cyclobot/XigloBot/src/navigation/move_slow_and_clear/include/**",
+                "/home/cuongnguen/VinAICode/cyclobot/XigloBot/src/navigation/nav_core/include/**",
+                "/home/cuongnguen/VinAICode/cyclobot/XigloBot/src/navigation/navfn/include/**",
+                "/home/cuongnguen/IVASTbot/Mobile_robot/src/rf2o_laser_odometry/include/**",
+                "/home/cuongnguen/IVASTbot/Mobile_robot/src/robot_localization/include/**",
+                "/home/cuongnguen/IVASTbot/Mobile_robot/src/robot_pose_ekf/include/**",
+                "/home/cuongnguen/IVASTbot/Mobile_robot/src/rosserial/rosserial_server/include/**",
+                "/home/cuongnguen/IVASTbot/Mobile_robot/src/rosserial/rosserial_test/include/**",
+                "/home/cuongnguen/VinAICode/cyclobot/XigloBot/src/navigation/rotate_recovery/include/**",
+                "/home/cuongnguen/IVASTbot/Mobile_robot/src/usb_cam/include/**",
+                "/home/cuongnguen/VinAICode/cyclobot/XigloBot/src/navigation/voxel_grid/include/**",
+                "/usr/include/**",
+                "${workspaceFolder}/robot_controllers/include",
+                "${workspaceFolder}"
+            ],
+            "name": "ROS"
+        }
+    ],
+    "version": 4
+}
