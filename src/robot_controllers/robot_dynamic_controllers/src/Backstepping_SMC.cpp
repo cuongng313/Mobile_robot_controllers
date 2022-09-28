@@ -114,7 +114,7 @@ int main(int argc, char** argv){
   ros::Publisher pubError = n.advertise<geometry_msgs::Vector3>("/control_error", 10);
 
   int i = 0;
-  double t = 0.0;
+  double time_step = 0.0;
 
   odom_path.header.frame_id = "/odom";
 	odom_path.header.stamp = ros::Time::now();
@@ -142,13 +142,18 @@ int main(int argc, char** argv){
 		}
     else {
       if (i >= ref_path.poses.size() - 1) {
-        i = 0; 
+        i = 0;
+        time_step = 0; 
       }
       else {
-        refPath_ << ref_path.poses[i].pose.position.x, ref_path.poses[i].pose.position.y, ref_path.poses[i].pose.orientation.z;
-        refPathDerivative_ << ref_path_derivative.poses[i].pose.position.x, ref_path_derivative.poses[i].pose.position.y, ref_path_derivative.poses[i].pose.position.z;
-        refPath2Derivative_ << ref_path_2derivative.poses[i].pose.position.x, ref_path_2derivative.poses[i].pose.position.y, ref_path_2derivative.poses[i].pose.position.z; 
-        i++;
+        if(time_step == 1) {
+          refPath_ << ref_path.poses[i].pose.position.x, ref_path.poses[i].pose.position.y, ref_path.poses[i].pose.orientation.z;
+          refPathDerivative_ << ref_path_derivative.poses[i].pose.position.x, ref_path_derivative.poses[i].pose.position.y, ref_path_derivative.poses[i].pose.position.z;
+          refPath2Derivative_ << ref_path_2derivative.poses[i].pose.position.x, ref_path_2derivative.poses[i].pose.position.y, ref_path_2derivative.poses[i].pose.position.z; 
+          i++;
+          time_step = 0;
+        }
+        time_step++;
       }
     }
     //////////////////////////
@@ -229,11 +234,11 @@ int main(int argc, char** argv){
               0, 0, lambdaTheta;
 
     Eigen::Matrix3f gainK3;
-    gainSurface << kx3, 0, 0,
+    gainK3 << kx3, 0, 0,
               0,  ky3, 0,
               0, 0, ktheta3;
 
-    // velocityError_ = gainSurface*velocityError_;
+    velocityError_ = gainSurface*velocityError_;
 
     Eigen::Vector3f signS;    signS.setZero();
     signS << sgn(velocityError_(0)), sgn(velocityError_(1)), sgn(velocityError_(2));
@@ -242,9 +247,9 @@ int main(int argc, char** argv){
     controlSignal_ = D*globalVelocity + M_*(refVelDot - trackingError_ - gainK2*velocityError_ - gainK3*signS);  
 
 
-    if(abs(controlError.x) <= 0.00001) {controlSignal_(0) = 0;}
-    if(abs(controlError.y) <= 0.00001) {controlSignal_(1) = 0;}
-    if(abs(controlError.z) <= 0.00001) {controlSignal_(2) = 0;}
+    if(abs(controlError.x) <= 0.001) {controlSignal_(0) = 0;}
+    if(abs(controlError.y) <= 0.001) {controlSignal_(1) = 0;}
+    if(abs(controlError.z) <= 0.001) {controlSignal_(2) = 0;}
 
     const double SatValue = 500;
     const double SatValueW = 300;

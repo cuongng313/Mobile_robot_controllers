@@ -156,6 +156,7 @@ int main(int argc, char** argv){
         qd_dot << ref_path_derivative.poses[i].pose.position.x, ref_path_derivative.poses[i].pose.position.y, ref_path_derivative.poses[i].pose.position.z;
         qd_2dot << ref_path_2derivative.poses[i].pose.position.x, ref_path_2derivative.poses[i].pose.position.y, ref_path_2derivative.poses[i].pose.position.z; 
         i++;
+  
       }
     }
     //////////////////////////
@@ -228,20 +229,9 @@ int main(int argc, char** argv){
     Eigen::Vector3f satS;    satS.setZero();
     satS << sat(S(0)), sat(S(1)), sat(S(2));
 
-    const float frictionGainX = 0.1;
-    const float frictionGainY = 0.1;
-    const float frictionGainW = 0.1;
-
-    Eigen::Matrix3f FrictionGain;  
-    FrictionGain << frictionGainX, 0, 0,
-                    0, frictionGainY, 0,
-                    0, 0, frictionGainW;
-
-    Eigen::Vector3f signV;    signV.setZero();
-    signV << sgn(v(0)), sgn(v(1)), sgn(v(2));
 
     // Feq = D*q_dot + FrictionGain*signV  + M_*(qd_2dot - lambda*e_dot);
-    Feq = D*q_dot + FrictionGain*signV  + M_*(qd_2dot - lambda*e_dot);
+    Feq = D*q_dot  + M_*(qd_2dot - lambda*e_dot);
     Fsw = -M_*(gainK1*satS + gainK2*S);
 
     F = Feq + Fsw;
@@ -250,8 +240,8 @@ int main(int argc, char** argv){
     // if(abs(controlError.y) <= 0.00001) {F(1) = 0;}
     // if(abs(controlError.z) <= 0.00001) {F(2) = 0;}
 
-    const double SatValue = 500;
-    const double SatValueW = 300;
+    const double SatValue = 5000;
+    const double SatValueW = 3000;
 
     if (F(0) > SatValue) {F(0) = SatValue;}
     if (F(0) < -SatValue) {F(0) = -SatValue;}
