@@ -148,8 +148,12 @@ int main(int argc, char** argv){
       qd_2dot.setZero();
 		}
     else {
-      if (i >= ref_path.poses.size() - 1) {
-        i = 0; 
+      if (i > ref_path.poses.size() - 1) {
+        if ( t == 2000) {
+          i = 0;
+        }
+        t++;
+        
       }
       else {
         qd << ref_path.poses[i].pose.position.x, ref_path.poses[i].pose.position.y, ref_path.poses[i].pose.orientation.z;

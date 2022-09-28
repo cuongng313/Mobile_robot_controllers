@@ -60,7 +60,7 @@ bool path_generator(nav_msgs::Path& path, nav_msgs::Path& ref_path_derivative, n
 {
     // Generate the circle path
     double Ts = 0.1;
-    double step = 2000;
+    double step = 1000;
     double TimePeriod = step*Ts;
     double ohmega = 2*PI/TimePeriod;
     // double SamplingTime = 1/step;
@@ -87,17 +87,27 @@ bool path_generator(nav_msgs::Path& path, nav_msgs::Path& ref_path_derivative, n
         double dxE, dyE, dyawE;
         double dx2E, dy2E, dyaw2E;
         double yawd, yaw_sd, yaw_ssd;
+
+
+        if(i == step - 1) {
+            yaw = 2*PI*i/step + PI/2;
+            yaw_s = yaw;
+            yaw_ss = yaw;
+
+            yawd = 2*PI*i/step;
+            yaw_sd = yawd;
+            yaw_ssd = yawd;
+        }
+        else {
+            yaw = 2*PI*i/step + PI/2;
+            yaw_s = 2*PI*(i+1)/step + PI/2;
+            yaw_ss = 2*PI*(i+2)/step + PI/2;
+
+            yawd = 2*PI*i/step;
+            yaw_sd = 2*PI*(i+1)/step;
+            yaw_ssd = 2*PI*(i+2)/step;
+        }
         
-        
-        yaw = 2*PI*i/step + PI/2;
-        yaw_s = 2*PI*(i+1)/step + PI/2;
-        yaw_ss = 2*PI*(i+2)/step + PI/2;
-
-        yawd = 2*PI*i/step;
-        yaw_sd = 2*PI*(i+1)/step;
-        yaw_ssd = 2*PI*(i+2)/step;
-
-
         if(yawd > PI) {yawd = yawd - 2*PI;}
         if(yawd < -PI) {yawd = yawd + 2*PI;}
         if(yaw_sd > PI) {yaw_sd = yaw_sd - 2*PI;}
