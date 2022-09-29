@@ -44,7 +44,7 @@ void callback(robot_controllers::SMCcontrollerReconfigureConfig &config, uint32_
   saturatedValue = config.saturatedValue;
   std::cout << "kx, ky, ktheta: " << kx << ", " << ky << ", " << ktheta << std::endl;
 }
-
+int noise = 0;
 /* Subscribers Callback */
 void odomCallback(const nav_msgs::Odometry::ConstPtr& msgOdom){
   odom.pose = msgOdom->pose;
@@ -69,7 +69,12 @@ void odomCallback(const nav_msgs::Odometry::ConstPtr& msgOdom){
   q(0) = msgOdom->pose.pose.position.x;
   q(1) = msgOdom->pose.pose.position.y;
 
-  v << odom.twist.twist.linear.x, odom.twist.twist.linear.y, odom.twist.twist.angular.z;
+  noise++;
+  // add noise to V
+  if (noise == 100) {noise = 0;}
+  v << odom.twist.twist.linear.x + 0.0*sin(noise), 
+      odom.twist.twist.linear.y + 0.0*cos(noise), 
+      odom.twist.twist.angular.z;
 }
 
 void refPathCallback(const nav_msgs::Path& msg) { ref_path = msg; }
@@ -93,8 +98,6 @@ int sgn(double temp) {
   return (temp < 0) ? -1 : ((temp > 0) ? 1 : 0);
 
 }
-
-
 
 int main(int argc, char** argv){
   ros::init(argc, argv, "robot_dynamic_controllers");
@@ -149,8 +152,9 @@ int main(int argc, char** argv){
 		}
     else {
       if (i > ref_path.poses.size() - 1) {
-        if ( t == 2000) {
+        if ( t == 200) {
           i = 0;
+          t = 0;
         }
         t++;
         
@@ -240,9 +244,9 @@ int main(int argc, char** argv){
 
     F = Feq + Fsw;
 
-    // if(abs(controlError.x) <= 0.00001) {F(0) = 0;}
-    // if(abs(controlError.y) <= 0.00001) {F(1) = 0;}
-    // if(abs(controlError.z) <= 0.00001) {F(2) = 0;}
+    if(abs(controlError.x) <= 0.001) {F(0) = 0;}
+    if(abs(controlError.y) <= 0.001) {F(1) = 0;}
+    if(abs(controlError.z) <= 0.001) {F(2) = 0;}
 
     const double SatValue = 5000;
     const double SatValueW = 3000;

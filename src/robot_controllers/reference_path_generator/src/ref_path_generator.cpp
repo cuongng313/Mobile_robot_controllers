@@ -60,7 +60,7 @@ bool path_generator(nav_msgs::Path& path, nav_msgs::Path& ref_path_derivative, n
 {
     // Generate the circle path
     double Ts = 0.1;
-    double step = 1000;
+    double step = 2000;
     double TimePeriod = step*Ts;
     double ohmega = 2*PI/TimePeriod;
     // double SamplingTime = 1/step;

@@ -37,8 +37,8 @@
         <yaw_velocity_p_gain>1.0</yaw_velocity_p_gain>
         <x_velocity_p_gain>1.0</x_velocity_p_gain>
         <y_velocity_p_gain>1.0</y_velocity_p_gain>
-        <max_x_velocity>2.0</max_x_velocity>
-        <max_y_velocity>2.0</max_y_velocity>
+        <max_x_velocity>5.0</max_x_velocity>
+        <max_y_velocity>5.0</max_y_velocity>
         <max_yaw_velocity>5</max_yaw_velocity>
       </plugin>
     </gazebo>
