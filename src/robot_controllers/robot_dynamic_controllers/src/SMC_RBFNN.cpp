@@ -11,6 +11,7 @@
 #include <dynamic_reconfigure/server.h>
 #include </home/cuongnguen/IVASTbot/Robot_control/devel/include/robot_dynamic_controllers/SMCcontrollerReconfigureConfig.h>
 #include <Eigen/Dense>
+#include <RBFneuralNetwork.h>
 
 #define PI 3.14159265
 
@@ -141,6 +142,13 @@ int main(int argc, char** argv){
 
   geometry_msgs::Vector3 controlError;
 
+  RBFNN rbf(3, 10, 5, 20);
+  rbf.calculate(q);
+  std::cout << " state input: " << std::endl
+            << q << std::endl;
+  std::cout << " RBFNN output with state input: " << std::endl
+            << rbf.output_ << std::endl;
+
   while (ros::ok()) { 
     
     /* reference trajectory */
@@ -156,7 +164,6 @@ int main(int argc, char** argv){
           t = 0;
         }
         t++;
-        
       }
       else {
         qd << ref_path.poses[i].pose.position.x, ref_path.poses[i].pose.position.y, ref_path.poses[i].pose.orientation.z;
@@ -259,71 +266,78 @@ int main(int argc, char** argv){
     if (F(2) > SatValueW) {F(2) = SatValueW;}
     if (F(2) < -SatValueW) {F(2) = -SatValueW;};
 
-    std::cout << "ref x y theta: " << qd(0)
-                                    << " "
-                                    << qd(1)
-                                    << " "
-                                    << qd(2)
-                                    << std::endl;
 
-    std::cout << "ref dev x y theta: " << qd_dot(0)
-                                    << " "
-                                    << qd_dot(1)
-                                    << " "
-                                    << qd_dot(2)
-                                    << std::endl;                                
+    rbf.calculate(q);
+    std::cout << " state input: " << std::endl
+               << q << std::endl;
+    std::cout << " RBFNN output with state input: " << std::endl
+               << rbf.output_ << std::endl << std::endl;
 
-    std::cout << "ref 2dev x y theta: " << qd_2dot(0)
-                                    << " "
-                                    << qd_2dot(1)
-                                    << " "
-                                    << qd_2dot(2)
-                                    << std::endl;
+    // std::cout << "ref x y theta: " << qd(0)
+    //                                 << " "
+    //                                 << qd(1)
+    //                                 << " "
+    //                                 << qd(2)
+    //                                 << std::endl;
 
-    std::cout << "x y theta: " << q(0)
-                                    << " "
-                                    << q(1)
-                                    << " "
-                                    << q(2)
-                                    << std::endl;
+    // std::cout << "ref dev x y theta: " << qd_dot(0)
+    //                                 << " "
+    //                                 << qd_dot(1)
+    //                                 << " "
+    //                                 << qd_dot(2)
+    //                                 << std::endl;                                
 
-    std::cout << "velocity x y theta: " << v(0)
-                                    << " "
-                                    << v(1)
-                                    << " "
-                                    << v(2)
-                                    << std::endl;   
+    // std::cout << "ref 2dev x y theta: " << qd_2dot(0)
+    //                                 << " "
+    //                                 << qd_2dot(1)
+    //                                 << " "
+    //                                 << qd_2dot(2)
+    //                                 << std::endl;
 
-    std::cout << "global velocity x y theta: " << q_dot(0)
-                                    << " "
-                                    << q_dot(1)
-                                    << " "
-                                    << q_dot(2)
-                                    << std::endl;                                               
+    // std::cout << "x y theta: " << q(0)
+    //                                 << " "
+    //                                 << q(1)
+    //                                 << " "
+    //                                 << q(2)
+    //                                 << std::endl;
 
-    std::cout << "error x y theta: " << e(0)
-                                    << " "
-                                    << e(1)
-                                    << " "
-                                    << e(2)
-                                    << std::endl;
+    // std::cout << "velocity x y theta: " << v(0)
+    //                                 << " "
+    //                                 << v(1)
+    //                                 << " "
+    //                                 << v(2)
+    //                                 << std::endl;   
 
-    std::cout << "sliding surface x y theta: " << S(0)
-                                            << " "
-                                            << S(1)
-                                            << " "
-                                            << S(2)
-                                            << std::endl;
+    // std::cout << "global velocity x y theta: " << q_dot(0)
+    //                                 << " "
+    //                                 << q_dot(1)
+    //                                 << " "
+    //                                 << q_dot(2)
+    //                                 << std::endl;                                               
 
-    // std::cout << "ref w: " << refTrajectoryYaw << std::endl;
-    // std::cout << "cur w: " << q.theta << std::endl;
+    // std::cout << "error x y theta: " << e(0)
+    //                                 << " "
+    //                                 << e(1)
+    //                                 << " "
+    //                                 << e(2)
+    //                                 << std::endl;
 
-    std::cout << "control signal out x y w: " << F(0)
-                                    << " "
-                                    << F(1)
-                                    << " "
-                                    << F(2)
-                                    << std::endl << std::endl;
+    // std::cout << "sliding surface x y theta: " << S(0)
+    //                                         << " "
+    //                                         << S(1)
+    //                                         << " "
+    //                                         << S(2)
+    //                                         << std::endl;
+
+    // // std::cout << "ref w: " << refTrajectoryYaw << std::endl;
+    // // std::cout << "cur w: " << q.theta << std::endl;
+
+    // std::cout << "control signal out x y w: " << F(0)
+    //                                 << " "
+    //                                 << F(1)
+    //                                 << " "
+    //                                 << F(2)
+    //                                 << std::endl << std::endl;
 
     pubTwist.linear.x = F(0);
     pubTwist.linear.y = F(1);

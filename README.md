@@ -9,3 +9,5 @@ The package includes controllers (mainly nonlinear types) for the mobile robot (
 - dynamic controllers: good performance but with more tracking error than kinematic controllers. Input is forces along three axes (maximum error 0.075(m) with x and y, 0.06(rad) with yaw)
 	+ BacksteppingSMC: good without adding the SMC part
 	+ SMC: robust and good performance ( max error ~ 0.05(m)) (can handle with noise but chattering, tested with noisy velocity)
+
+Update: 10-10-2022: Add RBFNN funtion

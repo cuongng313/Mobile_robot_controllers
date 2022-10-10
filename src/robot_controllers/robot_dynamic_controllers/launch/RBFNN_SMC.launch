@@ -1,0 +1,7 @@
+<launch>
+  <!-- <rosparam file="$(find robot_controllers)/cfg/control_parameters.yaml" /> -->
+
+  <node pkg="robot_dynamic_controllers" type="adaptiveRBF_SMC" name="adaptiveRBF_SMC" output = "screen" >
+  
+  </node>
+</launch>

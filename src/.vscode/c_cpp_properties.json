@@ -38,7 +38,8 @@
                 "/home/cuongnguen/VinAICode/cyclobot/XigloBot/src/navigation/voxel_grid/include/**",
                 "/usr/include/**",
                 "${workspaceFolder}/robot_controllers/include",
-                "${workspaceFolder}"
+                "${workspaceFolder}",
+                "${workspaceFolder}/robot_controllers/robot_dynamic_controllers/include"
             ],
             "name": "ROS"
         }
