@@ -24,6 +24,7 @@ RBFNN::RBFNN(int sizeOfVector, int number_neural,
 
     for (int i = 0; i < sizeOfVector; i++) {
         this->rbfcenter_.row(i) = tempRow;
+        if ( i == 2) {this->rbfcenter_.row(i) = 0.1*tempRow; }    // fix for the small value of radian
     }
 
     // std::cout << "size of center: " << this->rbfcenter_.rows() << "x"

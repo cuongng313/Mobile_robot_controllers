@@ -100,6 +100,7 @@ generate_dynamic_reconfigure_options(
   # cfg/PIDcontroller_reconfig.cfg
   cfg/BackSMCcontroller_reconfig.cfg
   cfg/SMCcontroller_reconfig.cfg
+  cfg/RBFNN_SMC_reconfig.cfg
 )
 
 ###################################
@@ -226,5 +227,5 @@ add_dependencies(SMC_controller ${PROJECT_NAME}_gencfg)
 target_link_libraries(SMC_controller ${catkin_LIBRARIES})
 
 add_executable(adaptiveRBF_SMC src/RBFneuralNetwork.cpp src/SMC_RBFNN.cpp)
-# add_dependencies(adaptiveRBF_SMC ${PROJECT_NAME}_gencfg)
+add_dependencies(adaptiveRBF_SMC ${PROJECT_NAME}_gencfg)
 target_link_libraries(adaptiveRBF_SMC ${catkin_LIBRARIES})

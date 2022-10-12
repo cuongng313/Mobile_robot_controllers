@@ -9,7 +9,7 @@
 #include <cmath>
 
 #include <dynamic_reconfigure/server.h>
-#include </home/cuongnguen/IVASTbot/Robot_control/devel/include/robot_dynamic_controllers/SMCcontrollerReconfigureConfig.h>
+#include </home/cuongnguen/IVASTbot/Robot_control/devel/include/robot_dynamic_controllers/RBFNNSMCcontrollerReconfigureConfig.h>
 #include <Eigen/Dense>
 #include <RBFneuralNetwork.h>
 
@@ -34,10 +34,17 @@ double kx = 30, ky = 30, ktheta = 20;
 double kx2 = 30, ky2 = 30, ktheta2 = 20; 
 double saturatedValue = 1;
 
+double rbfGainConstant = 25;
+double muy = 0.1;
+
 /*-----------------------------------------*/
 
-void callback(robot_controllers::SMCcontrollerReconfigureConfig &config, uint32_t level) {
+void callback(robot_controllers::RBFNNSMCcontrollerReconfigureConfig &config, uint32_t level) {
   ROS_INFO("Reconfigure Request");
+
+  rbfGainConstant = config.rbfGainConstant;
+  muy = config.rbf_muy;
+
   kx = config.kx;   ky = config.ky;   ktheta = config.ktheta;
   kx2 = config.kx2;   ky2 = config.ky2;   ktheta2 = config.ktheta2;
 
@@ -103,11 +110,13 @@ int sgn(double temp) {
 int main(int argc, char** argv){
   ros::init(argc, argv, "robot_dynamic_controllers");
   ros::NodeHandle n;
-  ros::Rate loop_rate(50);
+
+  const float frequence = 50;
+  ros::Rate loop_rate(frequence);
 
   // dynamic reconfigure server
-  dynamic_reconfigure::Server<robot_controllers::SMCcontrollerReconfigureConfig> server;
-  dynamic_reconfigure::Server<robot_controllers::SMCcontrollerReconfigureConfig>::CallbackType f;
+  dynamic_reconfigure::Server<robot_controllers::RBFNNSMCcontrollerReconfigureConfig> server;
+  dynamic_reconfigure::Server<robot_controllers::RBFNNSMCcontrollerReconfigureConfig>::CallbackType f;
   f = boost::bind(&callback, _1, _2);
   server.setCallback(f);
   
@@ -130,8 +139,10 @@ int main(int argc, char** argv){
 
 
   Eigen::Vector3f Feq;    Feq << 0.0, 0.0, 0.0;
+  Eigen::Vector3f Feq_rbfnn;    Feq_rbfnn << 0.0, 0.0, 0.0;
   Eigen::Vector3f Fsw;    Fsw << 0.0, 0.0, 0.0;
   Eigen::Vector3f F;    F << 0.0, 0.0, 0.0;
+  Eigen::Vector3f F_rbfnn;    F_rbfnn << 0.0, 0.0, 0.0;
   Eigen::Vector3f e;    e << 0.0, 0.0, 0.0;
   Eigen::Vector3f e_dot;    e_dot << 0.0, 0.0, 0.0;
   Eigen::Vector3f S;   S << 0.0, 0.0, 0.0;
@@ -142,12 +153,29 @@ int main(int argc, char** argv){
 
   geometry_msgs::Vector3 controlError;
 
-  RBFNN rbf(3, 10, 5, 20);
+  const long int neural_number = 1000;
+  const int input_size = 3;
+  const double center_range = 10;
+  const double rbd_width = 25;
+
+  RBFNN rbf(input_size, neural_number, center_range, rbd_width);
   rbf.calculate(q);
-  std::cout << " state input: " << std::endl
-            << q << std::endl;
-  std::cout << " RBFNN output with state input: " << std::endl
-            << rbf.output_ << std::endl;
+
+  const float initialConstant = 0.5;
+  
+  double samplTime = 1/frequence;
+
+
+  Eigen::MatrixXf rbfPreWeight(rbf.n_, rbf.i_size_); rbfPreWeight.setIdentity();
+  rbfPreWeight = initialConstant*rbfPreWeight;
+
+  Eigen::MatrixXf rbfWeight(rbf.n_, rbf.i_size_); rbfWeight.setZero();
+
+  Eigen::MatrixXf rbfGain(rbf.n_, rbf.n_); rbfGain.setIdentity();
+  Eigen::MatrixXf rbfGainIdentity(rbf.n_, rbf.n_); rbfGainIdentity.setIdentity();
+    
+
+  Eigen::VectorXf rbfnnOutput(rbf.i_size_);
 
   while (ros::ok()) { 
     
@@ -243,16 +271,37 @@ int main(int argc, char** argv){
     Eigen::Vector3f satS;    satS.setZero();
     satS << sat(S(0)), sat(S(1)), sat(S(2));
 
+    /*************** Calculate RBFNN ****************/
+    
+    rbf.calculate(q);
+
+    rbfGain = rbfGainConstant*rbfGainIdentity;
+    rbfWeight = rbfPreWeight - samplTime*rbfGain*(rbf.output_*S.transpose()*M_.inverse() - muy*S.squaredNorm()*rbfPreWeight);
+    // rbfWeight = rbfPreWeight - samplTime*rbfGain*(rbf.output_*S.transpose()*M_.inverse());
+
+    rbfnnOutput = rbfWeight.transpose()*rbf.output_;
+    rbfPreWeight = rbfWeight;
+
+    std::cout << " state input: " << std::endl
+               << q << std::endl;
+    std::cout << " RBF function output with state input: " << std::endl
+               << rbf.output_ << std::endl << std::endl;
+    std::cout << " RBFNN output: " << std::endl
+               << rbfnnOutput << std::endl << std::endl;
 
     // Feq = D*q_dot + FrictionGain*signV  + M_*(qd_2dot - lambda*e_dot);
-    Feq = D*q_dot  + M_*(qd_2dot - lambda*e_dot);
+
+    Feq = rbfnnOutput  + M_*(qd_2dot - lambda*e_dot);
+
+    // Feq = M_*(qd_2dot - lambda*e_dot);
     Fsw = -M_*(gainK1*satS + gainK2*S);
 
     F = Feq + Fsw;
+    // F_rbfnn = Feq_rbfnn + Fsw;
 
-    if(abs(controlError.x) <= 0.001) {F(0) = 0;}
-    if(abs(controlError.y) <= 0.001) {F(1) = 0;}
-    if(abs(controlError.z) <= 0.001) {F(2) = 0;}
+    if(abs(controlError.x) <= 0.0001) {F(0) = 0;}
+    if(abs(controlError.y) <= 0.0001) {F(1) = 0;}
+    if(abs(controlError.z) <= 0.0001) {F(2) = 0;}
 
     const double SatValue = 5000;
     const double SatValueW = 3000;
@@ -266,82 +315,85 @@ int main(int argc, char** argv){
     if (F(2) > SatValueW) {F(2) = SatValueW;}
     if (F(2) < -SatValueW) {F(2) = -SatValueW;};
 
+    if (isnan(F(0)) == 1) {F(0) = 0;}
+    if (isnan(F(1)) == 1) {F(1) = 0;}
+    if (isnan(F(2)) == 1) {F(2) = 0;}
 
-    rbf.calculate(q);
-    std::cout << " state input: " << std::endl
-               << q << std::endl;
-    std::cout << " RBFNN output with state input: " << std::endl
-               << rbf.output_ << std::endl << std::endl;
+    
 
-    // std::cout << "ref x y theta: " << qd(0)
-    //                                 << " "
-    //                                 << qd(1)
-    //                                 << " "
-    //                                 << qd(2)
-    //                                 << std::endl;
+    std::cout << "ref x y theta: " << qd(0)
+                                    << " "
+                                    << qd(1)
+                                    << " "
+                                    << qd(2)
+                                    << std::endl;
 
-    // std::cout << "ref dev x y theta: " << qd_dot(0)
-    //                                 << " "
-    //                                 << qd_dot(1)
-    //                                 << " "
-    //                                 << qd_dot(2)
-    //                                 << std::endl;                                
+    std::cout << "ref dev x y theta: " << qd_dot(0)
+                                    << " "
+                                    << qd_dot(1)
+                                    << " "
+                                    << qd_dot(2)
+                                    << std::endl;                                
 
-    // std::cout << "ref 2dev x y theta: " << qd_2dot(0)
-    //                                 << " "
-    //                                 << qd_2dot(1)
-    //                                 << " "
-    //                                 << qd_2dot(2)
-    //                                 << std::endl;
+    std::cout << "ref 2dev x y theta: " << qd_2dot(0)
+                                    << " "
+                                    << qd_2dot(1)
+                                    << " "
+                                    << qd_2dot(2)
+                                    << std::endl;
 
-    // std::cout << "x y theta: " << q(0)
-    //                                 << " "
-    //                                 << q(1)
-    //                                 << " "
-    //                                 << q(2)
-    //                                 << std::endl;
+    std::cout << "x y theta: " << q(0)
+                                    << " "
+                                    << q(1)
+                                    << " "
+                                    << q(2)
+                                    << std::endl;
 
-    // std::cout << "velocity x y theta: " << v(0)
-    //                                 << " "
-    //                                 << v(1)
-    //                                 << " "
-    //                                 << v(2)
-    //                                 << std::endl;   
+    std::cout << "velocity x y theta: " << v(0)
+                                    << " "
+                                    << v(1)
+                                    << " "
+                                    << v(2)
+                                    << std::endl;   
 
-    // std::cout << "global velocity x y theta: " << q_dot(0)
-    //                                 << " "
-    //                                 << q_dot(1)
-    //                                 << " "
-    //                                 << q_dot(2)
-    //                                 << std::endl;                                               
+    std::cout << "global velocity x y theta: " << q_dot(0)
+                                    << " "
+                                    << q_dot(1)
+                                    << " "
+                                    << q_dot(2)
+                                    << std::endl;                                               
 
-    // std::cout << "error x y theta: " << e(0)
-    //                                 << " "
-    //                                 << e(1)
-    //                                 << " "
-    //                                 << e(2)
-    //                                 << std::endl;
+    std::cout << "error x y theta: " << e(0)
+                                    << " "
+                                    << e(1)
+                                    << " "
+                                    << e(2)
+                                    << std::endl;
 
-    // std::cout << "sliding surface x y theta: " << S(0)
-    //                                         << " "
-    //                                         << S(1)
-    //                                         << " "
-    //                                         << S(2)
-    //                                         << std::endl;
+    std::cout << "sliding surface x y theta: " << S(0)
+                                            << " "
+                                            << S(1)
+                                            << " "
+                                            << S(2)
+                                            << std::endl;
 
-    // // std::cout << "ref w: " << refTrajectoryYaw << std::endl;
-    // // std::cout << "cur w: " << q.theta << std::endl;
+    // std::cout << "ref w: " << refTrajectoryYaw << std::endl;
+    // std::cout << "cur w: " << q.theta << std::endl;
 
-    // std::cout << "control signal out x y w: " << F(0)
-    //                                 << " "
-    //                                 << F(1)
-    //                                 << " "
-    //                                 << F(2)
-    //                                 << std::endl << std::endl;
+    std::cout << "control signal out x y w: " << F(0)
+                                    << " "
+                                    << F(1)
+                                    << " "
+                                    << F(2)
+                                    << std::endl << std::endl;
 
     pubTwist.linear.x = F(0);
     pubTwist.linear.y = F(1);
     pubTwist.angular.z = F(2);
+
+    // pubTwist.linear.x = F_rbfnn(0);
+    // pubTwist.linear.y = F_rbfnn(1);
+    // pubTwist.angular.z = F_rbfnn(2);
 
     pubControl.publish(pubTwist);
 
