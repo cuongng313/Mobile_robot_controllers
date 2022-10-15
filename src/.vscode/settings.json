@@ -78,6 +78,10 @@
         "typeindex": "cpp",
         "typeinfo": "cpp",
         "valarray": "cpp",
-        "alignedvector3": "cpp"
+        "alignedvector3": "cpp",
+        "*.expression": "cpp",
+        "fft": "cpp",
+        "core": "cpp",
+        "specialfunctions": "cpp"
     }
 }

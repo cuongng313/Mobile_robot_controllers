@@ -47,6 +47,7 @@ void callback(robot_controllers::robotControllerReconfigureConfig &config, uint3
   std::cout << "kx, ky, ktheta: " << kx << ", " << ky << ", " << ktheta << std::endl;
 }
 
+int noise = 0;
 /* Subscribers Callback */
 void odomCallback(const nav_msgs::Odometry::ConstPtr& msgOdom){
   odom.pose = msgOdom->pose;
@@ -71,7 +72,12 @@ void odomCallback(const nav_msgs::Odometry::ConstPtr& msgOdom){
   pose2d(0) = msgOdom->pose.pose.position.x;
   pose2d(1) = msgOdom->pose.pose.position.y;
 
-  localVelocity << odom.twist.twist.linear.x, odom.twist.twist.linear.y, odom.twist.twist.angular.z;
+  noise++;
+  // add noise to V
+  if (noise == 100) {noise = 0;}
+  localVelocity << odom.twist.twist.linear.x + 0.99*sin(noise), 
+                    odom.twist.twist.linear.y + 0.99*cos(noise), 
+                    odom.twist.twist.angular.z;
 }
 
 void refPathCallback(const nav_msgs::Path& msg) { ref_path = msg; }
@@ -251,8 +257,8 @@ int main(int argc, char** argv){
     if(abs(controlError.y) <= 0.001) {controlSignal_(1) = 0;}
     if(abs(controlError.z) <= 0.001) {controlSignal_(2) = 0;}
 
-    const double SatValue = 500;
-    const double SatValueW = 300;
+    const double SatValue = 5000;
+    const double SatValueW = 3000;
 
     if (controlSignal_(0) > SatValue) {controlSignal_(0) = SatValue;}
     if (controlSignal_(0) < -SatValue) {controlSignal_(0) = -SatValue;}
